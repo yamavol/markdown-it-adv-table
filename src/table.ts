@@ -236,6 +236,14 @@ export class TableCell {
     return this.attr.rowspan || 1;
   }
 
+  get endcol(): number {
+    return this.col + this.colspan - 1;
+  }
+
+  get endrow(): number {
+    return this.row + this.rowspan - 1;
+  }
+
   is(row: number, col: number): boolean {
     return this.row === row && this.col === col;
   }
@@ -453,8 +461,8 @@ export class CellState {
 
       // recursively check right cell
       if (span !== undefined) {
-        if (span.col + span.colspan > col) {
-          col = span.col + span.colspan;
+        if (span.endcol > col) {
+          col = span.endcol;
         } 
         else {
           throw new Error("never happen. check implementation");
