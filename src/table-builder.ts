@@ -72,7 +72,7 @@ export class TableBuilder implements ITableBuilder {
       || col < this.tableSpec.headerCols ? "th" : "td";
 
     if (isRowFirst) {
-      if (this.useTHead && row < this.tableSpec.headerRows) {
+      if (this.useTHead && row === 0) {
         this.startTHead();
       } else if (this.useTBody && row === this.tableSpec.headerRows){
         this.startTBody();
