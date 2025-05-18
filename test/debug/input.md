@@ -1,4 +1,4 @@
-```table cols="1,1,1,1" header-rows=1 header-columns=1
+```table cols="1,1,1,1" header-rows=1 header-cols=1
 | Category
 | Item
 | Price

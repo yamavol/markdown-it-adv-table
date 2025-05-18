@@ -6,7 +6,7 @@ type HAlign = "left" | "center" | "right";
 type TableAttrKeys = "cols"
   | "style" 
   | "header-rows" 
-  | "header-columns"
+  | "header-cols"
   | "format";
 
 export type TableAttr = 
@@ -38,7 +38,7 @@ export class TableSpec {
   constructor(attr: TableAttr) {
     this.attr = attr;
     this.headerRows = parseInt(attr["header-rows"] ?? "0");
-    this.headerCols = parseInt(attr["header-columns"] ?? "0");
+    this.headerCols = parseInt(attr["header-cols"] ?? "0");
     this.colspecs = new ColSpecs(attr.cols ?? "");
     this.styles = TableSpec.parseStyle(attr.style ?? "");
   }
@@ -113,7 +113,7 @@ export class TableSpec {
     const k: Required<TableAttr> = {
       cols: "",
       align: "",
-      "header-columns": "",
+      "header-cols": "",
       "header-rows": "",
       style: "",
       format: ""
