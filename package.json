@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-adv-table",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Markdown syntax extension for better table support",
   "keywords": [
     "markdown",
@@ -9,6 +9,14 @@
     "table",
     "csv"
   ],
+  "homepage": "https://github.com/yamavol/markdown-it-adv-table#readme",
+  "bugs": {
+    "url": "https://github.com/yamavol/markdown-it-adv-table/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamavol/markdown-it-adv-table.git"
+  },
   "license": "MIT",
   "author": "yamavol",
   "type": "module",
