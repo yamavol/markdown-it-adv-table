@@ -4,7 +4,7 @@ import { Lexer, unwrapLiteral } from "./lexer.js";
 type HAlign = "left" | "center" | "right";
 
 type TableAttrKeys = "cols"
-  | "style" 
+  | "class" 
   | "header-rows" 
   | "header-cols"
   | "format";
@@ -30,7 +30,7 @@ export type CellAttr = {
 export class TableSpec {
 
   readonly attr: TableAttr;
-  readonly styles: string[];
+  readonly classes: string[];
   readonly headerRows: number;
   readonly headerCols: number;
   readonly colspecs: ColSpecs;
@@ -40,15 +40,19 @@ export class TableSpec {
     this.headerRows = parseInt(attr["header-rows"] ?? "0");
     this.headerCols = parseInt(attr["header-cols"] ?? "0");
     this.colspecs = new ColSpecs(attr.cols ?? "");
-    this.styles = TableSpec.parseStyle(attr.style ?? "");
+    this.classes = TableSpec.parseClass(attr.class ?? "");
   }
 
   get numCols(): number {
     return this.colspecs.numCols;
   }
 
-  static parseStyle(style: string): string[] {
-    return style.split(",").map((s) => s.trim());
+  static parseClass(classnames: string): string[] {
+    return classnames
+      .split(",")
+      .map((s) => s.trim())
+      .filter(s => s.length > 0)
+      .filter((s,i,arr) => arr.indexOf(s) === i); // uniq
   }
 
   static parseInfoString(info: string): TableAttr {
@@ -115,7 +119,7 @@ export class TableSpec {
       align: "",
       "header-cols": "",
       "header-rows": "",
-      style: "",
+      class: "",
       format: ""
     };
     return Object.keys(k) as TableAttrKeys[];

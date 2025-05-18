@@ -35,8 +35,8 @@ export class TableBuilder implements ITableBuilder {
   }
   startTable() {
     const token = this.state.push("table_open", "table", 1);
-    this.tableSpec.styles.forEach(style => {
-      token.attrJoin("class", style);
+    this.tableSpec.classes.forEach(name => {
+      token.attrJoin("class", name);
     });
 
     if (this.tableSpec.attr["caption"] !== undefined) {
