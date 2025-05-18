@@ -30,7 +30,7 @@ export class CsvTableParser {
 
     const builder = new TableBuilder(state, this._tableSpec);
     const md = state.md;
-    const istate = new md.inline.State("", md, {}, []);
+    const istate = new md.inline.State("", md, state.env, []);
 
     builder.startTable();
     for (let row = 0; row < cells.length; row++) {

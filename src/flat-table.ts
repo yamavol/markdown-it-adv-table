@@ -60,7 +60,7 @@ export class FlatTableParser {
         const cellAttr = FlatTableParser.parseCellspec(cellSpec);
 
         const cellContent = state.getLines(cellStart, cellEnd + 1, cellIndent, false).slice(cellSpec.length + cellIndent);
-        const cstate = new md.block.State(cellContent, md, {}, []);
+        const cstate = new md.block.State(cellContent, md, state.env, []);
         md.block.tokenize(cstate, 0, cellEnd + 1 - cellStart);
         
         if (cstate.tokens.length === 3
