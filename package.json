@@ -5,7 +5,9 @@
   "keywords": [
     "markdown",
     "markdown-it",
-    "table"
+    "markdown-it-plugin",
+    "table",
+    "csv"
   ],
   "license": "MIT",
   "author": "yamavol",
