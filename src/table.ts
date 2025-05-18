@@ -449,8 +449,8 @@ export class CellState {
 
       // recursively check right cell
       if (span !== undefined) {
-        if (span.col + span.rowspan > col) {
-          col = span.col + span.rowspan;
+        if (span.col + span.colspan > col) {
+          col = span.col + span.colspan;
         } 
         else {
           throw new Error("never happen. check implementation");
