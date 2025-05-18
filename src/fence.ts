@@ -7,8 +7,12 @@ export type Parser = (info: string, state: StateBlock, startLine: number, endLin
  * Parse fenced code block and if the name matches, the content is passed to 
  * the custom parser.
  */
-export function fence_custom(name: string, parser: Parser): RuleBlock {
+export function fence_custom(names: string|string[], parser: Parser): RuleBlock {
 
+  if (typeof names === "string") {
+    names = [names];
+  }
+  
   return (state: StateBlock, startLine: number, endLine: number, silent: boolean): boolean => {
     let pos = state.bMarks[startLine] + state.tShift[startLine];
     let max = state.eMarks[startLine];
@@ -40,7 +44,7 @@ export function fence_custom(name: string, parser: Parser): RuleBlock {
       }
     }
 
-    if (!params.trim().startsWith(name)) {
+    if (!names.some(name => params.startsWith(name))) {
       return false;
     }
   
@@ -95,7 +99,7 @@ export function fence_custom(name: string, parser: Parser): RuleBlock {
     state.line = nextLine + (haveEndMarker ? 1 : 0);
 
     if (parser !== undefined) {
-      parser(params, state, startLine, state.line);
+      parser(params, state, startLine, nextLine);
     }
     else {
       const token   = state.push("fence", "code", 0);
