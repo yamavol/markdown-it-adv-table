@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build:dist": "tsc --build tsconfig.dist.json",
+    "build:dev": "tsc --build tsconfig.dev.json",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint src",
