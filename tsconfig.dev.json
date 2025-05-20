@@ -2,6 +2,5 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "incremental": false,
   }
 }
