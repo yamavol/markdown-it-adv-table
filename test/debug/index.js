@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import MarkdownIt from "markdown-it";
-import advTable from "../../dist/index.js";
+import advTable from "../../lib/index.js";
 const __dirname = import.meta.dirname;
 
 const md = new MarkdownIt();

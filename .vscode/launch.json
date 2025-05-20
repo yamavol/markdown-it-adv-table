@@ -17,7 +17,7 @@
       },
       "program": "${workspaceFolder}/test/debug/index.js",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/lib/**/*.js"
       ]
     }
   ]
