@@ -6,8 +6,7 @@
     "markdown",
     "markdown-it",
     "markdown-it-plugin",
-    "table",
-    "csv"
+    "table"
   ],
   "homepage": "https://github.com/yamavol/markdown-it-adv-table#readme",
   "bugs": {
