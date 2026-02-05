@@ -20,7 +20,7 @@ export function trimIndent(input: string) {
     lines = lines.slice(1);
   if (lines[lines.length-1].length === 0)
     lines = lines.slice(0, lines.length - 1);
-  return lines.join("\n");
+  return lines.map(line => line + "\n").join("");
 
   function countIndent(input: string) {
     return input.search(/\S|$/);
@@ -34,5 +34,5 @@ test("trimIndent", () => {
     789
     `;
   const output = trimIndent(input);
-  expect(output).toBe("123\n456\n789");
+  expect(output).toBe("123\n456\n789\n");
 });
