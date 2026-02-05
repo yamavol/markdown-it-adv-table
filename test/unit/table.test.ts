@@ -1,6 +1,36 @@
 import { describe, expect, it } from "vitest";
-import { CellState, ColSpecs, TableAttr, TableCell, TableSpec } from "../../src/table";
+import { CellState, ColSpecs, ColWidth, TableAttr, TableCell, TableSpec } from "../../src/table";
 
+describe("colwidth", () => {
+  it ("basic usage", () => {
+    const cw = new ColWidth("100px");
+    expect(cw.text).toBe("100px");
+    expect(cw.hasUnit).toBe(true);
+    expect(cw.relSize).toBe(0);
+  });
+
+  it ("relative size, mixed with units", () => {
+    const cw1 = new ColWidth("2");
+    const cw2 = new ColWidth("3");
+    const cw3 = new ColWidth("50%");
+    const all = [cw1, cw2, cw3];
+    expect(ColWidth.widthPropertyValue(cw1, all)).toBe("calc((100% - (50%)) * 2 / 5)");
+    expect(ColWidth.widthPropertyValue(cw2, all)).toBe("calc((100% - (50%)) * 3 / 5)");
+    expect(ColWidth.widthPropertyValue(cw3, all)).toBe("50%");
+  });
+
+  it ("relative size, invalid equation", () => {
+    const cw1 = new ColWidth("2");
+    const cw2 = new ColWidth("2");
+    const cw3 = new ColWidth("50%");
+    const cw4 = new ColWidth("100%");
+    const all = [cw1, cw2, cw3, cw4];
+    expect(ColWidth.widthPropertyValue(cw1, all)).toBe("calc((100% - (50% + 100%)) * 2 / 4)");
+    expect(ColWidth.widthPropertyValue(cw2, all)).toBe("calc((100% - (50% + 100%)) * 2 / 4)");
+    expect(ColWidth.widthPropertyValue(cw3, all)).toBe("50%");
+    expect(ColWidth.widthPropertyValue(cw4, all)).toBe("100%");
+  });
+});
 
 describe("tablespec", () => {
 
@@ -33,6 +63,18 @@ describe("colspecs", () => {
   it ("create colspecs", () => {
     const cols = new ColSpecs("1,1,1,1");
     expect(cols.numCols).toBe(4);
+  });
+  it ("create complex", () => {
+    const cols = new ColSpecs("100px,50rem,1200%,1,,10,90lvmin");
+    expect(cols.numCols).toBe(7);
+    expect(cols.colSpec(0).width?.text).toBe("100px");
+    expect(cols.colSpec(1).width?.text).toBe("50rem");
+    expect(cols.colSpec(2).width?.text).toBe("1200%");
+    expect(cols.colSpec(3).width?.text).toBe("1");
+    expect(cols.colSpec(4).width).toBeUndefined();
+    expect(cols.colSpec(5).width?.text).toBe("10");
+    expect(cols.colSpec(6).width?.text).toBe("90lvmin");
+    expect(cols.colWidthPropValue(5)).toBe("calc((100% - (100px + 50rem + 1200% + 90lvmin)) * 10 / 12)");
   });
 });
 

@@ -1,6 +1,17 @@
 
 import { Lexer, unwrapLiteral } from "./lexer.js";
 
+const cssUnits = <const>[
+  "px","%", "em","rem",
+  "ex","rex","cap","rcap",
+  "cm","mm","Q","in","pt","pc",
+  "ch","rch","ic","ric","lh","rlh",
+  "vw","vh","vi","vb","vmin","vmax",
+  "svw","svh","svi","svb","svmin","svmax",
+  "lvw","lvh","lvi","lvb","lvmin","lvmax",
+  "dvw","dvh","dvi","dvb","dvmin","dvmax",
+  "cqw","cqh","cqi","cqb","cqmin","cqmax"];
+
 type HAlign = "left" | "center" | "right";
 
 type TableAttrKeys = "cols"
@@ -14,7 +25,7 @@ export type TableAttr =
 
 export interface ColumnAttr {
   align?: HAlign;
-  width?: string; 
+  width?: ColWidth; 
 }
 
 export type CellAttr = {
@@ -23,6 +34,37 @@ export type CellAttr = {
   rowspan?: number;
   header?: boolean;
 };
+
+export class ColWidth {
+  text: string;
+  constructor(text: string) {
+    this.text = text;
+  }
+  get hasUnit(): boolean {
+    return !/^\d+$/.test(this.text);
+  }
+  get relSize(): number {
+    return this.hasUnit ? 0 : parseInt(this.text, 10);
+  }
+  /** calculate css width property value */
+  static widthPropertyValue(c: ColWidth, all: ColWidth[]): string {
+    if (c.hasUnit) {
+      return c.text;
+    } 
+    const total = all
+      .filter(cw => !cw.hasUnit)
+      .reduce((sum, cw) => sum + cw.relSize, 0);
+    const exclude = all.filter(cw => cw.hasUnit);
+
+    if (exclude.length === 0) {
+      return `calc(100% * ${c.relSize} / ${total})`;
+    } else {
+      const sum = exclude.map(cw => cw.text).join(" + ");
+      return `calc((100% - (${sum})) * ${c.relSize} / ${total})`;
+    }
+  }
+}
+
 
 /**
  * TableSpec keeps table attributes
@@ -156,20 +198,19 @@ export class ColSpecs {
     return this.specs[col] || {};
   }
 
-  colWidth(col: number): number {
+  colWidth(col: number): ColWidth {
     const spec = this.colSpec(col);
     if (spec.width) {
-      return parseInt(spec.width, 10);
+      return spec.width ;
     }
-    return 1;
+    return new ColWidth("1");
   }
 
-  colWidthRatio(col: number): number {
-    let totalWidth = 0;
-    for (let c = 0; c < this.numCols; c++) {
-      totalWidth += this.colWidth(c);
-    }
-    return this.colWidth(col) / totalWidth;
+  /** Return css width property value of the specified column */
+  colWidthPropValue(col: number): string {
+    const c = this.colWidth(col);
+    const all = this.specs.map(s => s.width || new ColWidth("1"));
+    return ColWidth.widthPropertyValue(c, all);
   }
 
   /** Forcefully re-initailize this instance. */
@@ -197,7 +238,7 @@ export class ColSpecs {
         attr.align = "right";
       }
       else if (char >= "0" && char <= "9") {
-        attr.width = consumeNumber();
+        attr.width = consumeColWidth();
         break;
       } 
       else {
@@ -210,10 +251,12 @@ export class ColSpecs {
     function consume(): string {
       return spec[pos++];
     }
-    function consumeNumber(): string {
-      const match = spec.slice(pos).match(/^\d+/);
-      if (!match) throw new Error("cannot consume number");
-      return match[0];
+    function consumeColWidth(): ColWidth {
+      const regex = new RegExp(`^\\d+(${cssUnits.join("|")})?`);
+      const match = spec.slice(pos).match(regex);
+      if (!match) throw new Error("cannot consume col width");
+      pos += match[0].length;
+      return new ColWidth(match[0]);
     }
   }
 }

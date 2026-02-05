@@ -115,10 +115,9 @@ export class TableBuilder implements ITableBuilder {
   private setColgroup(numCols: number) {
     this.state.push("colgroup_open", "colgroup", 1);
     for (let c = 0; c < numCols; c++) {
-      const colWidthRatio = this.tableSpec.colspecs.colWidthRatio(c);
-      const colWidth = `${Math.round(colWidthRatio * 100).toFixed(0)}%`;
+      const widthProp = this.tableSpec.colspecs.colWidthPropValue(c);
       const token = this.state.push("col", "col", 0);
-      token.attrSet("style", `width: ${colWidth}`);
+      token.attrSet("style", `width: ${widthProp}`);
     }
     this.state.push("colgroup_close", "colgroup", -1);
   }
