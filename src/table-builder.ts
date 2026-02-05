@@ -38,6 +38,15 @@ export class TableBuilder implements ITableBuilder {
     this.tableSpec.classes.forEach(name => {
       token.attrJoin("class", name);
     });
+    
+    if (this.tableSpec.attr["width"] !== undefined) {
+      const width = this.tableSpec.attr["width"];
+      if (/^\d+$/.test(width)) {
+        token.attrSet("width", width); // Unit-less width is invalid in CSS
+      } else {
+        token.attrSet("style", `width: ${width}`);
+      }
+    }
 
     if (this.tableSpec.attr["caption"] !== undefined) {
       this.setCaption(this.tableSpec.attr["caption"]);

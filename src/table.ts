@@ -162,6 +162,7 @@ export class TableSpec {
       "header-cols": "",
       "header-rows": "",
       class: "",
+      width: "",
       format: ""
     };
     return Object.keys(k) as TableAttrKeys[];
