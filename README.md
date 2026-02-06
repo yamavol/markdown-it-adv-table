@@ -1,16 +1,20 @@
 
 # markdown-it-adv-table
 
-A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin to enable advanced table rendering in Markdown. The custom syntax allows to create complex tables supporting:
+A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin for advanced table rendering. 
 
-- Rowspan and colspan for merged cells
-- Custom column widths
-- Horizontal cell alignment
-- Table styling with css classes
-- Header rows and columns (using `<th>`)
-- Multiple blocks and nested markdown within cells
+This plugin adds custom table syntax to render complex tables easier. 
 
-## Install
+The "flat-table" syntax allows to:
+
+- Set Rowspan and colspan for spanning cells
+- Set column width
+- Set horizontal text alignment
+- Set css classes for table styling
+- Define Header rows and columns
+- Allow writing markdown inside the cells (nested document)
+
+## Installation
 
 ```bash
 npm install markdown-it-adv-table
@@ -25,11 +29,8 @@ md.use(advTable);
 const html = md.render("text...");
 ```
 
-## Documentation
 
-To Be Documented
-
-## Examples
+## Example
 
 ``````
 ```table cols=4 header-rows=2 header-cols=1
@@ -54,6 +55,7 @@ c3| Q1 Sales
 | $3,500
 | $4,000
 | $4,200
+```
 ``````
 
 <table>
@@ -91,6 +93,136 @@ c3| Q1 Sales
 </table>
 
 
+
+
+## Documentation
+
+The table is expressed in a fenced code block. 
+
+- A line that starts with `|` starts a new cell.
+- The cell content is parsed as Markdown.
+- The cell content spans until the next cell marker.
+
+A cell marker can include directives that control the cell’s properties.
+
+
+### TableSpec (Table Definition)
+
+The [info-string](https://spec.commonmark.org/0.31.2/#info-string) of the fenced code block is parsed as TableSpec.
+
+<table>
+<tr>
+    <th>Key</th>
+    <th>Type</th>
+    <th>Value</th>
+</tr>
+<tr>
+    <td>cols</td>
+    <td>number | string</td>
+    <td>
+        <p>Define number of columns.</p>
+        <p>If the value is a string literal, it is a <a href="#colspec"><code>ColSpec</code></a>.</p>
+        <pre>cols=3           // 3 columns
+cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
+  </td>
+</tr>
+<tr>
+    <td>header-cols</td>
+    <td>number</td>
+  <td>Number of header columns (rendered as &lt;th&gt;)</td>
+</tr>
+<tr>
+    <td>header-rows</td>
+    <td>number</td>
+  <td>Number of header rows (rendered as &lt;thead&gt; with &lt;th&gt;)</td>
+</tr>
+<tr>
+    <td>class</td>
+    <td>string</td>
+  <td>Table class names (space- or comma-separated)</td>
+</tr>
+<tr>
+    <td>width</td>
+    <td>number | string</td>
+  <td>Table width.</td>
+</tr>
+<tr>
+    <td>format</td>
+    <td>string</td>
+    <td>
+        <p>Use alternative table syntax. </p>
+        <ul>
+            <li><code>csv</code> : parse text as csv</li>
+            <li><code>tsv</code> : parse text as tsv</li>
+        </ul>
+    </td>
+</tr>
+</table>
+
+<h3 id="colspec">ColSpec (Column Definition)</h3>
+
+<code>ColSpec</code> is a comma-separated set-of-directives to control the column's properties.
+
+    "1,1,1"            3 columns, 1:1:1 ratio
+    "30%,15,30,60"     4 columns, 3:1:2:4 ratio
+    "<100px,,>25%"     3 columns, 100px-auto-25% with alignment directives
+
+<table>
+<tr>
+    <th>Directive</th>
+    <th>Description</th>
+</tr>
+<tr>
+    <td>size[unit]</td>
+    <td>
+        <p>Set column width.  Any css units can be used.</p>
+        <p>If the unit is omitted, the value represents the weight of the column. The plugin calculates the column width by dividing up the remaining space, based on its weight.</p>
+        <pre>"1,1,2"     = "25%,25%,50%"       (Eq = calc(100% * x / 4))
+"20%,1,1,2" = "20%,20%,20%,40%"   (Eq = calc( 80% * x / 4))</pre>
+        <p>If the size is empty or invalid, the width is unset. The weight of the unsized(auto) column defaults to 1.</p>
+        <p><small>NOTE: The actual width is calculated by the HTML engine, respecting the column's minimum content width.</small></p>
+    </td>
+</tr>
+<tr>
+    <td>&lt;<br>^<br>&gt;</td>
+    <td>
+    Left-aligned<br>
+    Center-aligned<br>
+    Right-aligned<br>
+    </td>
+</tr>
+</table>
+
+
+
+### Cell Directives (Cell Definition)
+
+<table>
+<tr>
+    <th>Syntax</th>
+    <th>Description</th>
+</tr>
+<tr>
+    <td>c2, c{\d+}</td>
+    <td>Set colspan</td>
+</tr>
+<tr>
+    <td>r2, r{\d+}</td>
+    <td>Set rowspan</td>
+</tr>
+<tr>
+    <td>&lt;<br>^<br>&gt;</td>
+    <td>Left align<br>Center align<br>Right align</td>
+</tr>
+<tr>
+    <td>h</td>
+  <td>Use &lt;th&gt; instead of &lt;td&gt;</td>
+</tr>
+</table>
+
+
+
+## More Examples
 
 
 ``````
