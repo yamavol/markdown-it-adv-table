@@ -98,15 +98,23 @@ export function fence_custom(names: string|string[], parser: Parser): RuleBlock 
     len = state.sCount[startLine];
     state.line = nextLine + (haveEndMarker ? 1 : 0);
 
-    if (parser !== undefined) {
-      parser(params, state, startLine, nextLine);
-    }
-    else {
+    const parseDefault = () => {
       const token   = state.push("fence", "code", 0);
       token.info    = params;
       token.content = state.getLines(startLine + 1, nextLine, len, true);
       token.markup  = markup;
       token.map     = [startLine, state.line];
+    };
+
+    if (parser !== undefined) {
+      try {
+        parser(params, state, startLine, nextLine);
+      } catch {
+        parseDefault();
+      }
+    } 
+    else {
+      parseDefault();
     }
     return true;
   };
