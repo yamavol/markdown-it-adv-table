@@ -29,7 +29,8 @@ export class FlatTableParser {
    * @param endLine the last line which contains the table syntax.
    */
   parse(state: StateBlock, startLine: number, endLine: number) {
-    const builder = new TableBuilder(state, this._tableSpec);
+    const md = state.md;
+    const builder = TableBuilder.newLocal(state, this._tableSpec);
     builder.startTable();
 
     let currentLine = startLine;
@@ -54,7 +55,6 @@ export class FlatTableParser {
         const cellEnd = currentLine;
         
         // parse cell content as document
-        const md = state.md;
         const cellIndent = FlatTableParser.getCellIndent(state, line);
         const cellSpec = FlatTableParser.cellspec(line);
         const cellAttr = FlatTableParser.parseCellspec(cellSpec);
@@ -85,6 +85,8 @@ export class FlatTableParser {
     }
 
     builder.endTable();
+
+    state.tokens.push(...builder.state.tokens);
   }
 
   getline(state: StateBlock, lineNumber: number): string {

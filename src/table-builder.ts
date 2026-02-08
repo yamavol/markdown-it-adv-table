@@ -24,6 +24,9 @@ export class TableBuilder implements ITableBuilder {
     this.tableSpec = tableSpec;
     this._cells = new CellState(tableSpec);
   }
+  static newLocal(state: StateBlock, tableSpec: TableSpec): TableBuilder {
+    return new TableBuilder(new state.md.block.State("", state.md, state.env, []), tableSpec);
+  }
   private get useColgroup() {
     return this.tableSpec.attr.cols?.startsWith("\"");
   }

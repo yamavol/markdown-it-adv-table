@@ -61,9 +61,9 @@ describe("flat-table test", () => {
       \`\`\`
       `);
 
-    expect(() => {
-      new MarkdownIt().use(flatTable).render(input);
-    }).toThrowError();
+    const md = new MarkdownIt().use(flatTable);
+    const html = md.render(input, {});
+    expect(html).toBe("<pre><code class=\"language-flat-table\">12345\n</code></pre>\n");
   });
 
   it ("empty table", () => {
@@ -93,15 +93,6 @@ describe("flat-table test", () => {
     expect(html.slice(0, 7)).toBe("<table>");
     expect(html.slice(html.length - 9)).toBe("</table>\n");
   });
-
-
-  
-
-
-
-
-
-
 });
 
 test("parser unit tests", () => {
