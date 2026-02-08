@@ -1,6 +1,10 @@
 
 # Release Log
 
+## 0.2.1 (2026-02-08)
+
+- Fix: width field not properly parsed
+
 ## 0.2.0 (2026-02-07)
 
 - New: Support setting table and column width
