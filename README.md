@@ -3,7 +3,11 @@
 
 A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin for advanced table rendering. 
 
-This plugin adds custom table syntax to render complex tables easier. 
+This plugin adds custom table syntaxes to render complex tables easier. 
+
+- "flat-table" syntax
+- "csv-table" syntax
+- "tsv-table" syntax
 
 The "flat-table" syntax allows to:
 
@@ -16,7 +20,7 @@ The "flat-table" syntax allows to:
 
 ## Installation
 
-```bash
+```sh
 npm install markdown-it-adv-table
 ```
 
@@ -29,8 +33,37 @@ md.use(advTable);
 const html = md.render("text...");
 ```
 
+<table>
+<tr>
+    <th>Plugin</th>
+    <th>LangName</th>
+    <th>Behavior</th>
+</tr>
+<tr>
+    <td><code>advTable</code></td>
+    <td>table*</td>
+    <td>Installs an all-unified plugin</td>
+</tr>
+<tr>
+    <td><code>flatTable</code></td>
+    <td>flat-table</td>
+    <td>parse flat-table syntax</td>
+</tr>
+<tr>
+    <td><code>csvTable</code></td>
+    <td>csv-table</td>
+    <td>render csv as table</td>
+</tr>
+<tr>
+    <td><code>tsvTable</code></td>
+    <td>tsv-table</td>
+    <td>render tsv as table</td>
+</tr>
+</table>
 
-## Example
+## Usage
+
+Use fenced code block for the table data.
 
 ``````
 ```table cols=4 header-rows=2 header-cols=1
@@ -91,9 +124,6 @@ c3| Q1 Sales
     </tr>
   </tbody>
 </table>
-
-
-
 
 ## Documentation
 
