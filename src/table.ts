@@ -90,8 +90,9 @@ export class TableSpec {
   }
 
   static parseClass(classnames: string): string[] {
-    return classnames
-      .split(",")
+
+    return unwrapLiteral(classnames, "\"")
+      .split(/[\s,]/)
       .map((s) => s.trim())
       .filter(s => s.length > 0)
       .filter((s,i,arr) => arr.indexOf(s) === i); // uniq

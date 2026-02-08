@@ -35,7 +35,6 @@ describe("colwidth", () => {
 describe("tablespec", () => {
 
   describe("colspec parse", () => {
-
     it ("from plain number", () => {
       const info = "cols=4";
       const attr = TableSpec.parseInfoString(info);
@@ -55,6 +54,18 @@ describe("tablespec", () => {
       const attr = TableSpec.parseInfoString(info);
       const spec = new TableSpec(attr);
       expect(spec.numCols).toBe(1);
+    });
+  });
+
+  describe("parse classnames", () => {
+
+    it ("multiple class names", () => {
+      const info = "class=\"table stripe,nice modern\"";
+      const attr = TableSpec.parseInfoString(info);
+      expect(attr.class).toBe("\"table stripe,nice modern\"");
+      
+      const spec = new TableSpec(attr);
+      expect(spec.classes).toEqual(["table", "stripe", "nice", "modern"]);
     });
   });
 });
