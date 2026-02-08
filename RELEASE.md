@@ -1,6 +1,11 @@
 
 # Release Log
 
+## 0.2.2 (2026-02-08)
+
+- Fix: output was sometimes wrong when table attrs were wrapped in quotes
+- Fix: output was wrong when all columns were header without body cells
+
 ## 0.2.1 (2026-02-08)
 
 - Fix: width field not properly parsed
