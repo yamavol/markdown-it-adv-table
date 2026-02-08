@@ -28,7 +28,7 @@ export class TableBuilder implements ITableBuilder {
     return new TableBuilder(new state.md.block.State("", state.md, state.env, []), tableSpec);
   }
   private get useColgroup() {
-    return this.tableSpec.attr.cols?.startsWith("\"");
+    return this.tableSpec.colspecs.finemode;
   }
   private get useTHead() {
     return this.tableSpec.headerRows > 0;
@@ -86,8 +86,6 @@ export class TableBuilder implements ITableBuilder {
     if (isRowFirst) {
       if (this.useTHead && row === 0) {
         this.startTHead();
-      } else if (this.useTBody && row === this.tableSpec.headerRows){
-        this.startTBody();
       }
       this.startRow();
     }
@@ -112,6 +110,7 @@ export class TableBuilder implements ITableBuilder {
 
       if (this.useTHead && row == this.tableSpec.headerRows - 1) {
         this.endTHead();
+        this.startTBody();
       }
     }
   }
