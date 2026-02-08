@@ -131,7 +131,7 @@ export class TableSpec {
         const key = consume();
         consume("=");
         const value = consume();
-        result[key] = value;
+        result[key] = unwrapLiteral(value, "\"");
       }
       else {
         // ignore unknown token
@@ -172,15 +172,14 @@ export class TableSpec {
 export class ColSpecs {
   readonly numCols: number;
   readonly specs: readonly ColumnAttr[];
+  readonly finemode: boolean = false;
 
   constructor(colspec: string) {
     if (colspec.startsWith("\"") || colspec.includes(",")) {
-      // colspec must be "1,1,1" not 1,1,1
-      // we can try parse 1,1,1 .... but since this is an invalid syntax, 
-      // the parser won't recognize unwrapped commma-separated values.
       const specs = unwrapLiteral(colspec, "\"").split(",");
       this.numCols = Math.max(1, specs.length);
       this.specs = specs.map(ColSpecs.parseColSpec);
+      this.finemode = true;
     }
     else if (/^\d+/.test(colspec)) {
       this.numCols = Math.max(1, parseInt(colspec, 10));

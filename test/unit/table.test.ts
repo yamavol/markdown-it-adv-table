@@ -42,13 +42,23 @@ describe("tablespec", () => {
       expect(attr.cols).toBe("4");
       expect(spec.numCols).toBe(4);
     });
-    
-    it ("from colspec string", () => {
-      const info = "cols=\"1,1,1,1,1\"";
+
+    it ("from plain number", () => {
+      const info = "cols=10";
       const attr = TableSpec.parseInfoString(info);
       const spec = new TableSpec(attr);
-      expect(attr.cols).toBe("\"1,1,1,1,1\"");
+      expect(attr.cols).toBe("10");
+      expect(spec.numCols).toBe(10);
+    });
+    
+    it ("from colspec string", () => {
+      const info = "cols=\"100px,1,1,1,1\"";
+      const attr = TableSpec.parseInfoString(info);
+      const spec = new TableSpec(attr);
+      expect(attr.cols).toBe("100px,1,1,1,1");
       expect(spec.numCols).toBe(5);
+      expect(spec.colspecs.numCols).toBe(5);
+      expect(spec.colspecs.colWidth(0).text).toBe("100px");
     });
 
     it ("from colspec string (wrong syntax?)", () => {
@@ -65,7 +75,7 @@ describe("tablespec", () => {
     it ("multiple class names", () => {
       const info = "class=\"table stripe,nice modern\"";
       const attr = TableSpec.parseInfoString(info);
-      expect(attr.class).toBe("\"table stripe,nice modern\"");
+      expect(attr.class).toBe("table stripe,nice modern");
       
       const spec = new TableSpec(attr);
       expect(spec.classes).toEqual(["table", "stripe", "nice", "modern"]);
@@ -87,6 +97,12 @@ describe("tablespec", () => {
 
     it ("no unit", () => {
       const info = "cols=\"1,1,1\" width=100";
+      const attr = TableSpec.parseInfoString(info);
+      expect(attr.width).toBe("100");
+    });
+
+    it ("no unit", () => {
+      const info = "cols=\"1,1,1\" width=\"100\"";
       const attr = TableSpec.parseInfoString(info);
       expect(attr.width).toBe("100");
     });
