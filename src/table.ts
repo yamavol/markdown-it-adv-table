@@ -101,27 +101,23 @@ export class TableSpec {
   static parseInfoString(info: string): TableAttr {
     const lexer = new Lexer(info);
     const tokens: string[] = [];
-    const wordRe = /^[a-zA-Z][a-zA-Z0-9_\-]+/;
+    const anyRe = /^[^\"=\s]*/;
     const result = {} as TableAttr;
     let cp = 0;
     while (cp != Lexer.EOF) {
       lexer.skipWhitespace();
       cp = lexer.peek();
-      if (Lexer.isAlphabet(cp)) {
-        tokens.push(lexer.consumeRe(wordRe));
+      if (Lexer.cmp(cp, "=")) {
+        tokens.push(lexer.consume());
       }
       else if (Lexer.cmp(cp, "\"")) {
         tokens.push(lexer.consumeLiteral("\""));
-      }
-      else if (Lexer.cmp(cp, "=")) {
-        tokens.push(lexer.consume());
       }
       else if (Lexer.isEOF(cp)) {
         break;
       }
       else {
-        // unknown symbol?
-        tokens.push(lexer.consume());
+        tokens.push(lexer.consumeRe(anyRe));
       }
     };
 

@@ -39,6 +39,22 @@ describe("lexer tests", () => {
     expect(lexer.consumeLiteral("\"")).toBe("\"vw \\\"xyz\"");
   });
 
+  it("check compoiste values", () => {
+    const lexer = new Lexer("  key1=value1   key2=\"value 2\"  key3=100px  ");
+    lexer.skipWhitespace();
+    expect(lexer.consumeWord()).toBe("key1");
+    expect(lexer.next()).toBe("=".codePointAt(0));
+    expect(lexer.consumeWord()).toBe("value1");
+    lexer.skipWhitespace();
+    expect(lexer.consumeWord()).toBe("key2");
+    expect(lexer.next()).toBe("=".codePointAt(0));
+    expect(lexer.consumeLiteral("\"")).toBe("\"value 2\"");
+    lexer.skipWhitespace();
+    expect(lexer.consumeWord()).toBe("key3");
+    expect(lexer.next()).toBe("=".codePointAt(0));
+    expect(lexer.consumeRe(/[a-zA-Z0-9]+/)).toBe("100px");
+  });
+
   it ("invalid syntaxes", () => {
     let lexer = new Lexer("abc");
     let prev = lexer.pos;
@@ -54,5 +70,6 @@ describe("lexer tests", () => {
     prev = lexer.pos;
     expect(lexer.consumeLiteral("\"")).toBe("\"abc\\");
     expect(lexer.peek()).toBe(Lexer.EOF);
+
   });
 });

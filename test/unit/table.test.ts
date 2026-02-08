@@ -39,6 +39,7 @@ describe("tablespec", () => {
       const info = "cols=4";
       const attr = TableSpec.parseInfoString(info);
       const spec = new TableSpec(attr);
+      expect(attr.cols).toBe("4");
       expect(spec.numCols).toBe(4);
     });
     
@@ -46,6 +47,7 @@ describe("tablespec", () => {
       const info = "cols=\"1,1,1,1,1\"";
       const attr = TableSpec.parseInfoString(info);
       const spec = new TableSpec(attr);
+      expect(attr.cols).toBe("\"1,1,1,1,1\"");
       expect(spec.numCols).toBe(5);
     });
 
@@ -53,7 +55,8 @@ describe("tablespec", () => {
       const info = "cols=1,1,1,1,1";
       const attr = TableSpec.parseInfoString(info);
       const spec = new TableSpec(attr);
-      expect(spec.numCols).toBe(1);
+      expect(attr.cols).toBe("1,1,1,1,1");
+      expect(spec.numCols).toBe(5);
     });
   });
 
@@ -66,6 +69,26 @@ describe("tablespec", () => {
       
       const spec = new TableSpec(attr);
       expect(spec.classes).toEqual(["table", "stripe", "nice", "modern"]);
+    });
+  });
+
+  describe("parse width", () => {
+    it ("number with unit", () => {
+      const info = "width=100px";
+      const attr = TableSpec.parseInfoString(info);
+      expect(attr.width).toBe("100px");
+    });
+
+    it ("relative width", () => {
+      const info = "width=100%";
+      const attr = TableSpec.parseInfoString(info);
+      expect(attr.width).toBe("100%");
+    });
+
+    it ("no unit", () => {
+      const info = "cols=\"1,1,1\" width=100";
+      const attr = TableSpec.parseInfoString(info);
+      expect(attr.width).toBe("100");
     });
   });
 });
