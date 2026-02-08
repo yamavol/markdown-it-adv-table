@@ -1,5 +1,5 @@
 import { describe } from "node:test";
-import { expect, it, test } from "vitest";
+import { expect, it } from "vitest";
 import { Lexer } from "../../src/lexer";
 
 describe("lexer tests", () => {
