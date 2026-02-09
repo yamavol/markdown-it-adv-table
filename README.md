@@ -61,9 +61,7 @@ const html = md.render("text...");
 </tr>
 </table>
 
-## Usage
-
-Use fenced code block for the table data.
+## Example
 
 ``````
 ```table cols=4 header-rows=2 header-cols=1
@@ -127,7 +125,9 @@ c3| Q1 Sales
 
 ## Documentation
 
-The table is expressed in a fenced code block. 
+The table is expressed in a fenced code block. The [info-string](https://spec.commonmark.org/0.31.2/#info-string) is parsed as [TableSpec](#tablespec), which defines the properties of the table.
+
+Then, the cells are defined from left-top to right-bottom. 
 
 - A line that starts with `|` starts a new cell.
 - The cell content is parsed as Markdown.
@@ -136,9 +136,7 @@ The table is expressed in a fenced code block.
 A cell marker can include directives that control the cell’s properties.
 
 
-### TableSpec (Table Definition)
-
-The [info-string](https://spec.commonmark.org/0.31.2/#info-string) of the fenced code block is parsed as TableSpec.
+<h3 id="tablespec">TableSpec (Table Definition)</h3>
 
 <table>
 <tr>
@@ -159,12 +157,12 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
 <tr>
     <td>header-cols</td>
     <td>number</td>
-  <td>Number of header columns (rendered as &lt;th&gt;)</td>
+  <td>Number of header columns (rendered with &lt;th&gt;)</td>
 </tr>
 <tr>
     <td>header-rows</td>
     <td>number</td>
-  <td>Number of header rows (rendered as &lt;thead&gt; with &lt;th&gt;)</td>
+  <td>Number of header rows (rendered with &lt;thead&gt; and &lt;th&gt;)</td>
 </tr>
 <tr>
     <td>class</td>
@@ -180,7 +178,7 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
     <td>format</td>
     <td>string</td>
     <td>
-        <p>Use alternative table syntax. </p>
+        <p>Use alternative table syntax (advTable only). </p>
         <ul>
             <li><code>csv</code> : parse text as csv</li>
             <li><code>tsv</code> : parse text as tsv</li>
@@ -191,11 +189,7 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
 
 <h3 id="colspec">ColSpec (Column Definition)</h3>
 
-<code>ColSpec</code> is a comma-separated set-of-directives to control the column's properties.
-
-    "1,1,1"            3 columns, 1:1:1 ratio
-    "30%,15,30,60"     4 columns, 3:1:2:4 ratio
-    "<100px,,>25%"     3 columns, 100px-auto-25% with alignment directives
+<code>ColSpec</code> is a comma-separated directives to set column's properties.
 
 <table>
 <tr>
@@ -215,11 +209,7 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
 </tr>
 <tr>
     <td>&lt;<br>^<br>&gt;</td>
-    <td>
-    Left-aligned<br>
-    Center-aligned<br>
-    Right-aligned<br>
-    </td>
+    <td>Left-aligned<br>Center-aligned<br>Right-aligned</td>
 </tr>
 </table>
 
@@ -252,6 +242,7 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
 
 
 
+
 ## More Examples
 
 
@@ -264,7 +255,7 @@ cols="1,1,2"     // 3 columns, 1:1:2 ratio</pre>
 
 r3| Fruits
 | Apple
->| $1.00 
+^| $1.00 
 | A smooth, round fruit with shiny red skin.
 
 | Banana
