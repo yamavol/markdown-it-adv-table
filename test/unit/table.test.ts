@@ -67,6 +67,28 @@ describe("tablespec", () => {
       const spec = new TableSpec(attr);
       expect(attr.cols).toBe("1,1,1,1,1");
       expect(spec.numCols).toBe(5);
+      expect(spec.colspecs.numCols).toBe(5);
+      expect(spec.colspecs.colWidth(0).text).toBe("1");
+    });
+
+    it("from unquoted size-unit (wrong syntax?)", () => {
+      const info = "cols=100px";
+      const attr = TableSpec.parseInfoString(info);
+      const spec = new TableSpec(attr);
+      expect(attr.cols).toBe("100px");
+      expect(spec.numCols).toBe(1);
+      expect(spec.colspecs.numCols).toBe(1);
+      expect(spec.colspecs.colWidth(0).text).toBe("100px");
+    });
+
+    it("from quoted size-unit (wrong syntax?)", () => {
+      const info = "cols=\"100px\"";
+      const attr = TableSpec.parseInfoString(info);
+      const spec = new TableSpec(attr);
+      expect(attr.cols).toBe("100px");
+      expect(spec.numCols).toBe(1);
+      expect(spec.colspecs.numCols).toBe(1);
+      expect(spec.colspecs.colWidth(0).text).toBe("100px");
     });
   });
 

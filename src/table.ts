@@ -172,17 +172,21 @@ export class ColSpecs {
 
   constructor(colspec: string) {
     if (colspec.startsWith("\"") || colspec.includes(",")) {
-      const specs = unwrapLiteral(colspec, "\"").split(",");
+      const specs = unwrapLiteral(colspec, "\"").split(","); // e.g. cols="10,10"
       this.numCols = Math.max(1, specs.length);
       this.specs = specs.map(ColSpecs.parseColSpec);
       this.finemode = true;
     }
-    else if (/^\d+/.test(colspec)) {
+    else if (/^\d+$/.test(colspec)) {  // e.g. cols=100
       this.numCols = Math.max(1, parseInt(colspec, 10));
       this.specs = Array(this.numCols).fill({});
     }
+    else if (/^\d+/.test(colspec)) {  // e.g. cols=100px
+      this.numCols = 1;
+      this.specs = [ColSpecs.parseColSpec(colspec)];
+    }
     else {
-      this.numCols = 0;
+      this.numCols = 1;
       this.specs = Array(this.numCols).fill({});
     }
   }
