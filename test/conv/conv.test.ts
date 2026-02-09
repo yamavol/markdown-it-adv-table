@@ -84,5 +84,41 @@ describe("conv test", () => {
       </table>
       `));
   });
+
+  it("convert table with alignment directive", () => {
+    const html = md.render(t(`
+      \`\`\`table cols="<1,^1,>1" header-rows=1
+      | Header1
+      | Header2
+      | Header3
+      | Cell1
+      | Cell2
+      | Cell3
+      \`\`\`
+      `));
+    expect(html).toBe(t(`
+      <table>
+      <colgroup>
+      <col style="width: calc(100% * 1 / 3)">
+      <col style="width: calc(100% * 1 / 3)">
+      <col style="width: calc(100% * 1 / 3)">
+      </colgroup>
+      <thead>
+      <tr>
+      <th style="text-align: left">Header1</th>
+      <th style="text-align: center">Header2</th>
+      <th style="text-align: right">Header3</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td style="text-align: left">Cell1</td>
+      <td style="text-align: center">Cell2</td>
+      <td style="text-align: right">Cell3</td>
+      </tr>
+      </tbody>
+      </table>
+      `));
+  });
 });
 

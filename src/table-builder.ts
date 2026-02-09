@@ -97,6 +97,9 @@ export class TableBuilder implements ITableBuilder {
     if (cell && cell.attr.colspan !== undefined) {
       token.attrSet("colspan", cell.colspan.toString());
     }
+    if (cell && this.tableSpec.colSpec(col).align !== undefined) {
+      token.attrSet("style", `text-align: ${this.tableSpec.colSpec(col).align}`);
+    }
     if (cell && cell.attr.align !== undefined) {
       token.attrSet("style", `text-align: ${cell.attr.align}`);
     }

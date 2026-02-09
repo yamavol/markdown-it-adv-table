@@ -94,6 +94,10 @@ export class TableSpec {
     return this.colspecs.numCols;
   }
 
+  colSpec(col: number): ColumnAttr {
+    return this.colspecs.colSpec(col);
+  }
+
   static parseClass(classnames: string): string[] {
 
     return unwrapLiteral(classnames, "\"")
