@@ -14,11 +14,16 @@ const cssUnits = <const>[
 
 type HAlign = "left" | "center" | "right";
 
-type TableAttrKeys = "cols"
-  | "class" 
-  | "header-rows" 
-  | "header-cols"
-  | "format";
+const tableAttrKeys = <const>[
+  "cols",
+  "class",
+  "header-rows",
+  "header-cols",
+  "width",
+  "format"
+];
+
+type TableAttrKeys = typeof tableAttrKeys[number];
 
 export type TableAttr = 
   { [key in TableAttrKeys]?: string } & { [key: string]: string };
@@ -152,17 +157,8 @@ export class TableSpec {
     }
   }
 
-  static awareKeys(): TableAttrKeys[] {
-    const k: Required<TableAttr> = {
-      cols: "",
-      align: "",
-      "header-cols": "",
-      "header-rows": "",
-      class: "",
-      width: "",
-      format: ""
-    };
-    return Object.keys(k) as TableAttrKeys[];
+  static awareKeys(): readonly TableAttrKeys[] {
+    return tableAttrKeys;
   }
 }
 
