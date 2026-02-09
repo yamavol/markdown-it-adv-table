@@ -1,6 +1,11 @@
 
 # Release Log
 
+## 0.2.3 (2026-02-10)
+
+- Fix: colspec with 1 column not properly parsed
+- Fix: alignment directive in tableSpec was unused
+
 ## 0.2.2 (2026-02-08)
 
 - Fix: output was sometimes wrong when table attrs were wrapped in quotes
